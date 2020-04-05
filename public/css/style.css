@@ -1,0 +1,20 @@
+
+.weather-page body {
+    background:blue;
+    background-image: url('/img/weather-background.jpg');
+    background-repeat: round;
+}
+
+.weather-page .text {
+    color: #f7f6ff;
+    text-shadow: 10px 10px 10px #333;
+    font-weight: bold;
+}
+
+.weather-page .fontsize {
+    font-size: 60px;
+}
+
+.fullScreen {
+    min-height: 100vh;
+}
