@@ -30,10 +30,23 @@
             <tbody>
             @foreach( $orders as $order )
                 <tr>
-                    <th scope="row">{{ $order->id }}</th>
+                    <th scope="row"><a href="{{ route('orders.edit', $order->id) }}">{{ $order->id }}</a></th>
                     <td>{{ $order->partner->name }}</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
+                    <td>{{ $order->order_price }}</td>
+                    <td>
+                        @foreach( $order->products as $index => $product)
+                            {{ $product->name }} <br>
+                        @endforeach
+                    </td>
+                    <td>
+                        @if($order->status == 0)
+                            Новый
+                        @elseif($order->status == 10)
+                            Подтвержден
+                        @elseif($order->status == 20)
+                            Завершен
+                        @endif
+                    </td>
                 </tr>
 
             @endforeach

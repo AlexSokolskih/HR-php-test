@@ -15,9 +15,16 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $data['orders'] = Order::all()->take(2);
-        $data['orders'] = Order::with('products')->with('partner')->get()->take(4);
-       // dd( $data['orders'] );
+        $data['orders'] = Order::with('products')->with('partner')->get();
+
+        foreach ($data['orders'] as $index => $order) {
+            $orderPrice = 0;
+            foreach ($order->products as $index => $product) {
+                $orderPrice += $product->pivot->price;
+            }
+            $order['order_price'] = $orderPrice;
+        }
+      //dd( $data['orders'] );
        return view('orders',$data);
     }
 
@@ -62,7 +69,7 @@ class OrderController extends Controller
      */
     public function edit($id)
     {
-        //
+        dd($id);
     }
 
     /**
