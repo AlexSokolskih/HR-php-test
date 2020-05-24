@@ -7,7 +7,7 @@
         <link rel="stylesheet" href="/css/app.css">
         <link rel="stylesheet" href="/css/style.css">
 
-        <title>Weather</title>
+        <title>Заказы</title>
 
     </head>
     <style>
