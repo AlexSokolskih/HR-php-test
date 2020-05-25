@@ -85,6 +85,7 @@
                 <div class="links">
                     <a href="{{ route('weather') }}">Погода</a>
                     <a href="{{ route('orders') }}">Заказы</a>
+                    <a href="{{ route('products') }}">Продукты</a>
                 </div>
             </div>
         </div>
