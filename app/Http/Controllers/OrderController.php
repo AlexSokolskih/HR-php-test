@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Order;
 use App\OrderProduct;
 use App\Partner;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -17,11 +18,39 @@ class OrderController extends Controller
     public function index()
     {
         $data['orders'] = Order::with('products')->with('partner')->get();
-
         foreach ($data['orders'] as $index => $order) {
             $order['order_price'] = $this->orderPrice($order);
         }
-        //dd( $data['orders'] );
+
+        $data['ordersExpired'] = $data['orders']->where('status', 10)->filter(function ($value, $key) {
+            return $value->delivery_dt > Carbon::now();
+        });
+        $data['ordersExpired'] = $data['ordersExpired']->sortByDesc('delivery_dt')->take(50);
+
+        $data['ordersCurrent'] = $data['orders']->where('status', 10)->filter(function ($value, $key) {
+            if ( ($value->delivery_dt > Carbon::now()) && ($value->delivery_dt < Carbon::now()->addDay(1)) )  {
+                return true;
+            } else {
+                return false;
+            }
+        });
+        $data['ordersCurrent'] = $data['ordersCurrent']->sortBy('delivery_dt');
+
+        $data['ordersNew'] = $data['orders']->where('status', 0)->filter(function ($value, $key) {
+            return $value->delivery_dt > Carbon::now();
+        });
+        $data['ordersNew'] = $data['ordersNew']->sortBy('delivery_dt')->take(50);
+
+        $data['ordersCompleted'] = $data['orders']->where('status', 20)->filter(function ($value, $key) {
+            if ( ($value->delivery_dt > Carbon::now()) && ($value->delivery_dt < Carbon::now()->addDay(1)) )  {
+                return true;
+            } else {
+                return false;
+            }
+        });
+        $data['ordersCompleted'] = $data['ordersCompleted']->sortByDesc('delivery_dt')->take(50);
+
+
         return view('orders.orders', $data);
     }
 

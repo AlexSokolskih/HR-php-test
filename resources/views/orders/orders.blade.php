@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="/css/app.css">
         <link rel="stylesheet" href="/css/style.css">
-
+        <script src="/js/app.js" defer></script>
         <title>Заказы</title>
 
     </head>
@@ -17,41 +17,41 @@
         <h1>Orders</h1>
     </div>
     <div class="container">
-        <table class="table table-hover">
-            <thead>
-            <tr>
-                <th scope="col">ид_заказа</th>
-                <th scope="col">название_партнера</th>
-                <th scope="col">стоимость_заказа</th>
-                <th scope="col">наименование_состав_заказа</th>
-                <th scope="col">статус_заказа</th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach( $orders as $order )
-                <tr>
-                    <th scope="row"><a href="{{ route('orders.edit', $order->id) }}">{{ $order->id }}</a></th>
-                    <td>{{ $order->partner->name }}</td>
-                    <td>{{ $order->order_price }}</td>
-                    <td>
-                        @foreach( $order->products as $index => $product)
-                            {{ $product->name }} <br>
-                        @endforeach
-                    </td>
-                    <td>
-                        @if($order->status == 0)
-                            Новый
-                        @elseif($order->status == 10)
-                            Подтвержден
-                        @elseif($order->status == 20)
-                            Завершен
-                        @endif
-                    </td>
-                </tr>
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a data-toggle="tab" href="#expired">просроченные</a>
+            </li>
+            <li>
+                <a data-toggle="tab" href="#current">текущие</a>
+            </li>
+            <li>
+                <a data-toggle="tab" href="#new">новые</a>
+            </li>
+            <li>
+                <a data-toggle="tab" href="#completed">выполненные</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="expired">
+                @component('orders.table', ['orders' => $ordersExpired ])
+                @endcomponent
+            </div>
+            <div class="tab-pane" id="current">
+                @component('orders.table', ['orders' => $ordersCurrent ])
+                @endcomponent
+            </div>
+            <div class="tab-pane" id="new">
+                @component('orders.table', ['orders' => $ordersNew ])
+                @endcomponent
+            </div>
+            <div class="tab-pane" id="completed">
+                @component('orders.table', ['orders' => $ordersCompleted ])
+                @endcomponent
+            </div>
+        </div>
+    </div>
+    <div class="container">
 
-            @endforeach
-            </tbody>
-        </table>
     </div>
     </body>
 </html>
